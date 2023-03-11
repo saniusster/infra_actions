@@ -44,7 +44,7 @@ jobs:
           with:
             push: true
             tags: saniuss/infra_actions:latest
-deploy:
+  deploy:
     runs-on: ubuntu-latest
     needs: build_and_push_to_docker_hub
     steps:
@@ -54,10 +54,8 @@ deploy:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USER }}
         key: ${{ secrets.SSH_KEY }}
-        passphrase: ${{ secrets.PASSPHRASE }} # Если ваш ssh-ключ защищён фразой-паролем
+        passphrase: ${{ secrets.PASSPHRASE }}
         script: |
-          # Выполняет pull образа с DockerHub
           sudo docker pull saniuss/infra_actions
-          #остановка всех контейнеров
           sudo docker stop $(sudo docker ps -a -q)
           sudo docker run --rm -d -p 5000:5000 saniuss/infra_actions
